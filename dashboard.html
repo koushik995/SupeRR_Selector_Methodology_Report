@@ -1,0 +1,2117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SupeRR Selector 2.0 | Pressure Analytics & Strategic Scouting Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --rr-pink: #E6007E;
+  --rr-pink-hover: #C5006C;
+  --rr-pink-light: rgba(230, 0, 126, 0.12);
+  --rr-navy: #0B132B;
+  --rr-dark: #0D1117;
+  --rr-card: #161B22;
+  --rr-card-border: #30363D;
+  --rr-blue: #1C2541;
+  --rr-light-blue: #3A506B;
+  --rr-gold: #FFD700;
+  --rr-gold-light: rgba(255, 215, 0, 0.15);
+  --rr-green: #10B981;
+  --rr-red: #EF4444;
+  --text-main: #F3F4F6;
+  --text-muted: #9CA3AF;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--rr-dark);
+  color: var(--text-main);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* Top Navigation Bar */
+.navbar {
+  background: linear-gradient(90deg, #0B132B 0%, #161B22 100%);
+  border-bottom: 2px solid var(--rr-pink);
+  padding: 0.85rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logo-badge {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, var(--rr-pink) 0%, #790042 100%);
+  border: 2px solid var(--rr-gold);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 1.25rem;
+  color: #FFF;
+  box-shadow: 0 0 15px rgba(230,0,126,0.5);
+}
+
+.brand-text h1 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #FFF;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brand-text p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.badge-tag {
+  background: var(--rr-pink-light);
+  color: var(--rr-pink);
+  border: 1px solid var(--rr-pink);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.confidential-pill {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid var(--rr-red);
+  color: #F87171;
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Tab Navigation */
+.tabs-header {
+  display: flex;
+  gap: 0.5rem;
+  background: #161B22;
+  padding: 0.5rem 2rem 0;
+  border-bottom: 1px solid var(--rr-card-border);
+  overflow-x: auto;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.tab-btn:hover {
+  color: #FFF;
+}
+
+.tab-btn.active {
+  color: var(--rr-pink);
+  border-bottom-color: var(--rr-pink);
+}
+
+/* Main Container */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem 3rem;
+}
+
+/* KPI Banner */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.kpi-card {
+  background: var(--rr-card);
+  border: 1px solid var(--rr-card-border);
+  border-radius: 10px;
+  padding: 1.2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--rr-pink);
+}
+
+.kpi-card.gold::before {
+  background: var(--rr-gold);
+}
+
+.kpi-card.blue::before {
+  background: var(--rr-light-blue);
+}
+
+.kpi-card.green::before {
+  background: var(--rr-green);
+}
+
+.kpi-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+}
+
+.kpi-val {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #FFF;
+  font-family: var(--font-mono);
+}
+
+.kpi-sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+/* Panels */
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+/* Tables */
+.table-card {
+  background: var(--rr-card);
+  border: 1px solid var(--rr-card-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  margin-bottom: 2rem;
+}
+
+.table-toolbar {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--rr-card-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.table-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #FFF;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.search-input {
+  background: #0D1117;
+  border: 1px solid var(--rr-card-border);
+  border-radius: 6px;
+  padding: 0.5rem 0.9rem;
+  color: #FFF;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  width: 260px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--rr-pink);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+th {
+  background: #0D1117;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--rr-card-border);
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.15s;
+}
+
+th:hover {
+  color: var(--rr-pink);
+}
+
+td {
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+  color: #D1D5DB;
+}
+
+tbody tr:hover {
+  background: rgba(230, 0, 126, 0.05);
+}
+
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--rr-light-blue);
+  color: #FFF;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.rank-badge.top3 {
+  background: var(--rr-pink);
+  box-shadow: 0 0 10px rgba(230,0,126,0.4);
+}
+
+.player-name-cell {
+  font-weight: 700;
+  color: #FFF;
+}
+
+.player-role-cell {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.score-cell {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--rr-gold);
+}
+
+.pos-delta {
+  color: var(--rr-green);
+  font-weight: 700;
+}
+
+.neg-delta {
+  color: var(--rr-red);
+  font-weight: 700;
+}
+
+/* Strategic Blueprint Cards */
+.blueprint-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.blueprint-card {
+  background: var(--rr-card);
+  border: 1px solid var(--rr-card-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.blueprint-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.priority-badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.priority-1 {
+  background: rgba(239, 68, 68, 0.2);
+  color: #F87171;
+  border: 1px solid var(--rr-red);
+}
+
+.priority-2 {
+  background: rgba(230, 0, 126, 0.2);
+  color: var(--rr-pink);
+  border: 1px solid var(--rr-pink);
+}
+
+.blueprint-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #FFF;
+}
+
+.blueprint-list {
+  list-style: none;
+  font-size: 0.85rem;
+  color: #D1D5DB;
+}
+
+.blueprint-list li {
+  margin-bottom: 0.65rem;
+  padding-left: 1.2rem;
+  position: relative;
+}
+
+.blueprint-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--rr-pink);
+}
+
+/* Playing XI Display */
+.xi-container {
+  background: var(--rr-card);
+  border: 1px solid var(--rr-card-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.xi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.xi-slot {
+  background: #0D1117;
+  border: 1px solid var(--rr-card-border);
+  border-radius: 8px;
+  padding: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.xi-slot.target {
+  border-color: var(--rr-pink);
+  background: rgba(230, 0, 126, 0.08);
+}
+
+.slot-num {
+  width: 28px;
+  height: 28px;
+  background: var(--rr-blue);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.8rem;
+  color: var(--rr-gold);
+}
+
+.slot-info h4 {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #FFF;
+}
+
+.slot-info p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Methodology Math Blocks */
+.math-block {
+  background: #0D1117;
+  border: 1px solid var(--rr-card-border);
+  border-radius: 8px;
+  padding: 1.2rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: #E5E7EB;
+  margin: 1rem 0;
+  overflow-x: auto;
+  line-height: 1.6;
+}
+
+/* Radar SVG Chart Container */
+.radar-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* Dropdown Unstop Selector Sheet */
+.cheat-sheet {
+  background: linear-gradient(135deg, rgba(11, 19, 43, 0.9) 0%, rgba(22, 27, 34, 0.9) 100%);
+  border: 2px solid var(--rr-gold);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.cheat-sheet h3 {
+  color: var(--rr-gold);
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.cheat-lists {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.cheat-col h4 {
+  font-size: 0.95rem;
+  color: #FFF;
+  margin-bottom: 0.6rem;
+  border-bottom: 1px solid var(--rr-card-border);
+  padding-bottom: 0.4rem;
+}
+
+.cheat-col ol {
+  padding-left: 1.4rem;
+  font-size: 0.88rem;
+}
+
+.cheat-col li {
+  margin-bottom: 0.4rem;
+  color: #E5E7EB;
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="brand-wrapper">
+    <div class="logo-badge">RR</div>
+    <div class="brand-text">
+      <h1>RAJASTHAN ROYALS <span class="badge-tag">SupeRR Selector 2.0</span></h1>
+      <p>Official Decision-Support System: Pressure Performance & Squad Strengthening</p>
+    </div>
+  </div>
+  <div class="confidential-pill">
+    <span>🔒 CONFIDENTIAL</span>
+    <span>ROUND 1 ANALYTICS</span>
+  </div>
+</nav>
+
+<div class="tabs-header">
+  <button class="tab-btn active" onclick="switchTab('exec')">Executive Briefing</button>
+  <button class="tab-btn" onclick="switchTab('batters')">Top 10 Batters</button>
+  <button class="tab-btn" onclick="switchTab('bowlers')">Top 10 Bowlers</button>
+  <button class="tab-btn" onclick="switchTab('rr-squad')">RR Squad Diagnostic</button>
+  <button class="tab-btn" onclick="switchTab('methodology')">Methodology & Math</button>
+</div>
+
+<div class="container">
+
+  <!-- KPI Grid -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Total Deliveries Analyzed</div>
+      <div class="kpi-val">200,999</div>
+      <div class="kpi-sub">867 Matches (IPL & T20I 2022-2026)</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-label">High-Pressure Moments (PI ≥ 0.55)</div>
+      <div class="kpi-val">50,558</div>
+      <div class="kpi-sub">Top 25.2% Leverage Match Situations</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">#1 Ranked Pressure Batter</div>
+      <div class="kpi-val" style="font-size:1.35rem; color:var(--rr-pink);">Tilak Varma</div>
+      <div class="kpi-sub">BCR: 82.3 | HP SR: 187.9 | HP Avg: 41.7</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">#1 Ranked Pressure Bowler</div>
+      <div class="kpi-val" style="font-size:1.35rem; color:var(--rr-green);">Jasprit Bumrah</div>
+      <div class="kpi-sub">BoCR: 66.6 | HP Econ: 6.90 | HP SR: 13.2</div>
+    </div>
+  </div>
+
+  <!-- TAB 1: EXECUTIVE BRIEFING -->
+  <div id="tab-exec" class="tab-panel active">
+    
+    <div class="blueprint-grid">
+      <!-- Priority 1 Card -->
+      <div class="blueprint-card">
+        <div class="blueprint-header">
+          <span class="priority-badge priority-1">PRIORITY 1: CRITICAL</span>
+          <div class="blueprint-title">SOLVING THE DEATH OVERS BOWLING LEAK</div>
+        </div>
+        <ul class="blueprint-list">
+          <li><strong>The Statistical Vulnerability:</strong> In overs 17-20 under pressure, RR's incumbent death options leak heavily: <strong>Sandeep Sharma (10.90 HP Econ, -64.9 runs saved)</strong> and <strong>Tushar Deshpande (11.55 HP Econ)</strong> lack toe-crushing yorker execution.</li>
+          <li><strong>The Antidote:</strong> Target <strong>MATHEESHA PATHIRANA (#2 Bowler)</strong>. Pathirana maintains a world-class <strong>7.65 HP Economy</strong> and a lethal <strong>10.61 strike rate</strong> (49 wickets in 520 balls under pressure).</li>
+          <li><strong>Secondary Target:</strong> Back domestic gem <strong>RASIKH SALAM (#8 Bowler)</strong> boasting an incredible <strong>8.80 balls per wicket</strong> under pressure.</li>
+        </ul>
+      </div>
+
+      <!-- Priority 2 Card -->
+      <div class="blueprint-card">
+        <div class="blueprint-header">
+          <span class="priority-badge priority-2">PRIORITY 2: ESSENTIAL</span>
+          <div class="blueprint-title">MIDDLE-TO-DEATH FINISHING DEPTH</div>
+        </div>
+        <ul class="blueprint-list">
+          <li><strong>The Statistical Vulnerability:</strong> While <strong>Dhruv Jurel (#14 overall, 182.4 HP SR, 38.4 Avg)</strong> is a world-class clutch talent, Shimron Hetmyer's strike rate drops to 164.7 in pressure, and Riyan Parag averages 15.2 under extreme crisis.</li>
+          <li><strong>The Antidote:</strong> Target <strong>TILAK VARMA (#1 Batter)</strong> or <strong>TRISTAN STUBBS (#4 Batter)</strong>. Tilak averages 41.7 at 187.9 SR with a colossal +44.9 Delta SR, stabilizing collapses without slowing down.</li>
+          <li><strong>Domestic Value Option:</strong> Back <strong>NAMAN DHIR (#7 Batter, 200.5 HP SR)</strong> or <strong>SHASHANK SINGH (#9 Batter, 56.2 HP Avg)</strong> for cost-effective Indian finishing depth.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Projected Playing XI -->
+    <div class="xi-container">
+      <div class="table-title">🎯 Projected Clutch-Optimized Rajasthan Royals Playing XI</div>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">
+        Engineered by pairing RR's retained core with top pressure performers to eliminate historical knockout collapse points.
+      </p>
+      <div class="xi-grid">
+        <div class="xi-slot">
+          <div class="slot-num">1</div>
+          <div class="slot-info">
+            <h4>Yashasvi Jaiswal (LHB)</h4>
+            <p>Powerplay Blitzkrieg | Dynamic Intent</p>
+          </div>
+        </div>
+        <div class="xi-slot">
+          <div class="slot-num">2</div>
+          <div class="slot-info">
+            <h4>Jos Buttler (RHB)</h4>
+            <p>#8 Pressure Batter (198.5 HP SR, +43.1 Delta)</p>
+          </div>
+        </div>
+        <div class="xi-slot">
+          <div class="slot-num">3</div>
+          <div class="slot-info">
+            <h4>Sanju Samson (C/WK)</h4>
+            <p>Top-Order Aggressor (189.0 HP SR, +34.4 Delta)</p>
+          </div>
+        </div>
+        <div class="xi-slot">
+          <div class="slot-num">4</div>
+          <div class="slot-info">
+            <h4>Riyan Parag (RHB)</h4>
+            <p>Middle-Overs Spin Enforcer (165.9 HP SR)</p>
+          </div>
+        </div>
+        <div class="xi-slot target">
+          <div class="slot-num">5</div>
+          <div class="slot-info">
+            <h4>TILAK VARMA [Target 1]</h4>
+            <p style="color:var(--rr-pink); font-weight:700;">#1 Pressure Batter (187.9 SR, 41.7 Avg, +44.9 Delta)</p>
+          </div>
+        </div>
+        <div class="xi-slot">
+          <div class="slot-num">6</div>
+          <div class="slot-info">
+            <h4>Dhruv Jurel (RHB)</h4>
+            <p>#14 Clutch Finisher (182.4 HP SR, 38.4 Avg)</p>
+          </div>
+        </div>
+        <div class="xi-slot target">
+          <div class="slot-num">7</div>
+          <div class="slot-info">
+            <h4>TRISTAN STUBBS [Target]</h4>
+            <p style="color:var(--rr-pink); font-weight:700;">#4 Pressure Finisher (181.2 HP SR, 40.6 Avg)</p>
+          </div>
+        </div>
+        <div class="xi-slot">
+          <div class="slot-num">8</div>
+          <div class="slot-info">
+            <h4>Wanindu Hasaranga</h4>
+            <p>#10 Pressure Bowler (10.1 HP SR, 43 Wkts)</p>
+          </div>
+        </div>
+        <div class="xi-slot">
+          <div class="slot-num">9</div>
+          <div class="slot-info">
+            <h4>Sandeep Sharma</h4>
+            <p>Death Tactical Knuckle-ball Specialist</p>
+          </div>
+        </div>
+        <div class="xi-slot target">
+          <div class="slot-num">10</div>
+          <div class="slot-info">
+            <h4>PATHIRANA [Target 2]</h4>
+            <p style="color:var(--rr-pink); font-weight:700;">#2 Pressure Bowler (7.65 HP Econ, 10.6 HP SR)</p>
+          </div>
+        </div>
+        <div class="xi-slot">
+          <div class="slot-num">11</div>
+          <div class="slot-info">
+            <h4>Trent Boult</h4>
+            <p>Powerplay New-Ball Strike Pacer</p>
+          </div>
+        </div>
+        <div class="xi-slot" style="border-style:dashed;">
+          <div class="slot-num">SUB</div>
+          <div class="slot-info">
+            <h4>Naman Dhir / Rasikh Salam</h4>
+            <p>Impact Sub: 200.5 HP SR Hitter or 8.8 HP SR Bowler</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dropdown Cheat Sheet -->
+    <div class="cheat-sheet">
+      <h3>📋 OFFICIAL UNSTOP DROPDOWN SELECTION CHEAT SHEET (RANK 1 TO 10)</h3>
+      <p style="font-size:0.85rem; color:#D1D5DB; margin-bottom:1rem;">
+        Use these exact ordered lists in the Unstop dropdown fields. Both lists reflect our calibrated, empirical Bayes valuation model.
+      </p>
+      <div class="cheat-lists">
+        <div class="cheat-col">
+          <h4>TOP 10 BATTERS UNDER PRESSURE</h4>
+          <ol>
+            <li><strong>Namboori Tilak Varma</strong> (Crisis Anchor / Closer)</li>
+            <li><strong>Suryakumar Yadav</strong> (360° Game-Breaker)</li>
+            <li><strong>Tim David</strong> (Death Overs Power Finisher)</li>
+            <li><strong>Tristan Stubbs</strong> (Middle-to-Death Finisher)</li>
+            <li><strong>Heinrich Klaasen</strong> (Spin Demolisher / High RRR)</li>
+            <li><strong>Nicholas Pooran</strong> (High-Tempo LHB Finisher)</li>
+            <li><strong>Naman Dhir</strong> (Emerging Power Slogger)</li>
+            <li><strong>Jos Buttler</strong> (Chamber of Clutch)</li>
+            <li><strong>Shashank Singh</strong> (Crisis Rescuer / Finisher)</li>
+            <li><strong>Shreyas Iyer</strong> (Knockout Counter-Puncher)</li>
+          </ol>
+        </div>
+        <div class="cheat-col">
+          <h4>TOP 10 BOWLERS UNDER PRESSURE</h4>
+          <ol>
+            <li><strong>Jasprit Bumrah</strong> (Unhittable Death Enforcer)</li>
+            <li><strong>Matheesha Pathirana</strong> (Slingy Yorker Weapon)</li>
+            <li><strong>Sunil Narine</strong> (Mystery Spin Choke)</li>
+            <li><strong>Rashid Khan</strong> (High-Leverage Leg-Spinner)</li>
+            <li><strong>Umran Malik</strong> (Raw Velocity Shock Weapon)</li>
+            <li><strong>Mitchell Santner</strong> (Defensive Finger Spin)</li>
+            <li><strong>Varun Chakravarthy</strong> (Mystery Spin Partnership Breaker)</li>
+            <li><strong>Rasikh Salam</strong> (Death Yorker Striker)</li>
+            <li><strong>Suyash Sharma</strong> (Attacking Wrist-Spin Controller)</li>
+            <li><strong>Wanindu Hasaranga</strong> (Clutch Middle Overs Game-Breaker)</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TAB 2: BATTERS LEADERBOARD -->
+  <div id="tab-batters" class="tab-panel">
+    <div class="table-card">
+      <div class="table-toolbar">
+        <div class="table-title">🏏 Top Batters Under Pressure (Min 150 HP Balls | Calibrated)</div>
+        <input type="text" id="bat-search" class="search-input" placeholder="Search batter name..." onkeyup="filterTable('bat-table', 'bat-search')">
+      </div>
+      <table id="bat-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Player Name</th>
+            <th>Score</th>
+            <th>HP Runs</th>
+            <th>HP Balls</th>
+            <th>HP Strike Rate</th>
+            <th>HP Average</th>
+            <th>Delta SR</th>
+            <th>Runs +/Par</th>
+            <th>Consistency</th>
+            <th>Tactical Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Injected via JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 3: BOWLERS LEADERBOARD -->
+  <div id="tab-bowlers" class="tab-panel">
+    <div class="table-card">
+      <div class="table-toolbar">
+        <div class="table-title">🎯 Top Bowlers Under Pressure (Min 150 HP Balls | Calibrated)</div>
+        <input type="text" id="bowl-search" class="search-input" placeholder="Search bowler name..." onkeyup="filterTable('bowl-table', 'bowl-search')">
+      </div>
+      <table id="bowl-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Player Name</th>
+            <th>Score</th>
+            <th>HP Wkts</th>
+            <th>HP Balls</th>
+            <th>HP Economy</th>
+            <th>HP Strike Rate</th>
+            <th>Delta Econ</th>
+            <th>Runs Saved</th>
+            <th>Clutch Spells</th>
+            <th>Tactical Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Injected via JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 4: RR SQUAD DIAGNOSTIC -->
+  <div id="tab-rr-squad" class="tab-panel">
+    <div class="table-card">
+      <div class="table-toolbar">
+        <div class="table-title">🛡️ Rajasthan Royals Squad Pressure Profile Diagnostic</div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Player Name</th>
+            <th>Role</th>
+            <th>HP Balls</th>
+            <th>HP SR / Econ</th>
+            <th>HP Avg / SR</th>
+            <th>Pressure Delta</th>
+            <th>Squad Status</th>
+            <th>Scouting Verdict</th>
+          </tr>
+        </thead>
+        <tbody id="rr-squad-body">
+          <!-- Injected via JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 5: METHODOLOGY & MATH -->
+  <div id="tab-methodology" class="tab-panel">
+    <div class="table-card" style="padding:1.5rem;">
+      <h3 style="color:#FFF; font-size:1.2rem; margin-bottom:0.8rem;">📐 Mathematical Framework & Pressure Calibration Engine</h3>
+      <p style="color:#D1D5DB; font-size:0.9rem; line-height:1.6;">
+        Our methodology rejects arbitrary heuristics in favor of an objective, game-state-driven leverage model.
+        Every delivery in the 200,999-ball dataset is mapped to a continuous <strong>Pressure Index (PI &isin; [0, 1])</strong>.
+      </p>
+
+      <div class="math-block">
+// 1. INNINGS 2: THE CHASE LEVERAGE FUNCTION
+Required_Run_Rate (RRR) = (Runs_Needed / Balls_Remaining) * 6.0
+P_RRR = 1.0 / (1.0 + exp(-0.45 * (RRR - 9.50)))     // Sigmoidal run rate stress curve
+P_Wickets = (10 - Wickets_in_Hand) / 9.0            // Resource depletion penalty
+P_Urgency = 1.0 - (Balls_Remaining / Total_Balls)   // Stage progression weight
+
+Crunch_Bonus = 0.20 * (1.0 - abs(RRR - 10.0) / 10.0) // Active only when Balls_Rem <= 30 & RRR in [4, 16]
+Chase_PI = (0.45 * P_RRR + 0.35 * P_Wickets + 0.20 * P_Urgency + Crunch_Bonus) * Knockout_Multiplier
+
+// 2. INNINGS 1: COLLAPSE & DEATH CRUCIBLE
+P_Collapse = Over <= 6 & Wkts >= 2 ? (0.35 + 0.15*(Wkts-2)) : (Over <= 10 & Wkts >= 3 ? 0.30 + 0.15*(Wkts-3) : 0.0)
+P_Death = Over >= 16 ? (0.40 + 0.08 * (Over - 15)) : 0.0
+Innings1_PI = max(P_Progression, P_Collapse, P_Death) * Knockout_Multiplier
+      </div>
+
+      <h4 style="color:#FFF; font-size:1.05rem; margin-top:1.5rem; margin-bottom:0.5rem;">Empirical Bayes Shrinkage Formulation</h4>
+      <p style="color:#D1D5DB; font-size:0.88rem; line-height:1.5;">
+        To prevent small-sample distortions (such as bilateral associate fixtures dominating IPL superstars), we shrink raw rates toward the population mean:
+      </p>
+      <div class="math-block">
+Shrunk_HP_Strike_Rate = (HP_Runs + Prior_SR * Prior_Weight) / (HP_Balls + Prior_Weight)
+  * Prior_SR = 155.0, Prior_Weight = 50.0 balls
+
+Shrunk_HP_Economy = (HP_Runs_Conceded + Prior_Econ * Prior_Overs) / (HP_Balls + Prior_Weight) * 6.0
+  * Prior_Econ = 9.0, Prior_Weight = 60.0 balls (10 overs)
+      </div>
+
+      <h4 style="color:#FFF; font-size:1.05rem; margin-top:1.5rem; margin-bottom:0.5rem;">The 4-Pillar Composite Rating</h4>
+      <div class="math-block">
+Pressure_Clutch_Score = 
+    0.30 * Execution_Score      (Shrunk Rate, Average, Boundary %, Dot Ball Suppression) +
+    0.25 * Elevation_Delta      (HP Performance minus Career Baseline) +
+    0.25 * Context_Value_Added  (Context Runs Above Expected & Wickets Above Expected) +
+    0.20 * Consistency_Volume   (Clutch Spell/Inning Frequency * Volume Damping Factor)
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const battersData = [
+  {
+    "striker_id": 7897,
+    "striker_name": "Namboori Tilak Varma",
+    "base_runs": 3596,
+    "base_balls": 2515,
+    "base_dismissals": 87,
+    "base_dots": 789,
+    "base_fours": 275,
+    "base_sixes": 172,
+    "base_matches": 127,
+    "base_sr": 142.9821073558648,
+    "base_avg": 41.333333333333336,
+    "hp_runs": 1208,
+    "hp_balls": 643,
+    "hp_dismissals": 29,
+    "hp_dots": 152,
+    "hp_fours": 88,
+    "hp_sixes": 77,
+    "hp_matches": 61,
+    "hp_runs_above_exp": 236.01776956491528,
+    "hp_weighted_runs": 1150.95,
+    "mean_pi": 0.7091336023610657,
+    "hp_sr": 187.86936236391912,
+    "hp_avg": 41.6551724137931,
+    "hp_dot_pct": 23.63919129082426,
+    "hp_bnd_pct": 25.660964230171075,
+    "clutch_inns": 24,
+    "total_hp_inns": 61,
+    "clutch_consistency": 39.34426229508197,
+    "delta_sr": 44.887255008054325,
+    "delta_avg": 0.3218390804597675,
+    "dot_suppression": 76.36080870917574,
+    "shrunk_hp_sr": 185.4978354978355,
+    "shrunk_hp_avg": 40.09375,
+    "comp_exec": 77.7685578223034,
+    "comp_delta": 87.03405364168493,
+    "comp_value": 94.2332474075689,
+    "comp_cons": 68.15461281090548,
+    "Pressure_Score": 82.27831517118558,
+    "is_ipl": true,
+    "role": "Crisis Anchor / Chase Closer",
+    "style": "LHB Middle Order",
+    "impact": "Rescues top-order collapses with elite 41.7 Avg, then accelerates to 187.9 SR."
+  },
+  {
+    "striker_id": 1699,
+    "striker_name": "Suryakumar Yadav",
+    "base_runs": 4595,
+    "base_balls": 2761,
+    "base_dismissals": 117,
+    "base_dots": 889,
+    "base_fours": 432,
+    "base_sixes": 248,
+    "base_matches": 139,
+    "base_sr": 166.4252082578776,
+    "base_avg": 39.27350427350427,
+    "hp_runs": 1012,
+    "hp_balls": 505,
+    "hp_dismissals": 27,
+    "hp_dots": 139,
+    "hp_fours": 97,
+    "hp_sixes": 63,
+    "hp_matches": 43,
+    "hp_runs_above_exp": 254.82051949068943,
+    "hp_weighted_runs": 961.75,
+    "mean_pi": 0.6886941362698951,
+    "hp_sr": 200.3960396039604,
+    "hp_avg": 37.48148148148148,
+    "hp_dot_pct": 27.524752475247528,
+    "hp_bnd_pct": 31.683168316831683,
+    "clutch_inns": 19,
+    "total_hp_inns": 43,
+    "clutch_consistency": 44.18604651162791,
+    "delta_sr": 33.970831346082804,
+    "delta_avg": -1.7920227920227916,
+    "dot_suppression": 72.47524752475248,
+    "shrunk_hp_sr": 196.3063063063063,
+    "shrunk_hp_avg": 36.23333333333333,
+    "comp_exec": 85.81787440279943,
+    "comp_delta": 70.37324162523146,
+    "comp_value": 99.9999999996933,
+    "comp_cons": 69.2364547804622,
+    "Pressure_Score": 82.18596368316345,
+    "is_ipl": true,
+    "role": "360\u00b0 Game-Breaker",
+    "style": "RHB #3 / #4",
+    "impact": "Scores 255 runs above par expectation in high leverage; unbowlable to orthodox fields."
+  },
+  {
+    "striker_id": 6396,
+    "striker_name": "Tim David",
+    "base_runs": 2178,
+    "base_balls": 1226,
+    "base_dismissals": 62,
+    "base_dots": 383,
+    "base_fours": 147,
+    "base_sixes": 162,
+    "base_matches": 98,
+    "base_sr": 177.65089722675367,
+    "base_avg": 35.12903225806452,
+    "hp_runs": 1178,
+    "hp_balls": 606,
+    "hp_dismissals": 31,
+    "hp_dots": 183,
+    "hp_fours": 78,
+    "hp_sixes": 93,
+    "hp_matches": 61,
+    "hp_runs_above_exp": 228.82376548184584,
+    "hp_weighted_runs": 1142.5,
+    "mean_pi": 0.7476522613727642,
+    "hp_sr": 194.3894389438944,
+    "hp_avg": 38.0,
+    "hp_dot_pct": 30.1980198019802,
+    "hp_bnd_pct": 28.217821782178216,
+    "clutch_inns": 28,
+    "total_hp_inns": 61,
+    "clutch_consistency": 45.90163934426229,
+    "delta_sr": 16.73854171714072,
+    "delta_avg": 2.8709677419354804,
+    "dot_suppression": 69.8019801980198,
+    "shrunk_hp_sr": 191.3871951219512,
+    "shrunk_hp_avg": 36.85294117647059,
+    "comp_exec": 77.66573885219391,
+    "comp_delta": 48.91124658333008,
+    "comp_value": 92.02686579543423,
+    "comp_cons": 79.2746846682468,
+    "Pressure_Score": 74.38918668399862,
+    "is_ipl": true,
+    "role": "Death Power Finisher",
+    "style": "RHB Death Overs",
+    "impact": "Brutal boundary power (194.4 SR); wins matches from equations requiring 14+ RPO."
+  },
+  {
+    "striker_id": 20702,
+    "striker_name": "Tristan Stubbs",
+    "base_runs": 1622,
+    "base_balls": 1082,
+    "base_dismissals": 43,
+    "base_dots": 299,
+    "base_fours": 124,
+    "base_sixes": 74,
+    "base_matches": 69,
+    "base_sr": 149.9075785582255,
+    "base_avg": 37.72093023255814,
+    "hp_runs": 933,
+    "hp_balls": 515,
+    "hp_dismissals": 23,
+    "hp_dots": 117,
+    "hp_fours": 74,
+    "hp_sixes": 52,
+    "hp_matches": 44,
+    "hp_runs_above_exp": 171.12209051398162,
+    "hp_weighted_runs": 902.3,
+    "mean_pi": 0.7176816698719436,
+    "hp_sr": 181.16504854368927,
+    "hp_avg": 40.56521739130435,
+    "hp_dot_pct": 22.718446601941743,
+    "hp_bnd_pct": 24.466019417475728,
+    "clutch_inns": 20,
+    "total_hp_inns": 44,
+    "clutch_consistency": 45.45454545454545,
+    "delta_sr": 31.25746998546381,
+    "delta_avg": 2.844287158746212,
+    "dot_suppression": 77.28155339805825,
+    "shrunk_hp_sr": 178.84955752212392,
+    "shrunk_hp_avg": 38.76923076923077,
+    "comp_exec": 72.37737577827467,
+    "comp_delta": 69.3537982026557,
+    "comp_value": 74.32991800830618,
+    "comp_cons": 72.256529958818,
+    "Pressure_Score": 72.08544777798647,
+    "is_ipl": true,
+    "role": "Middle-to-Death Finisher",
+    "style": "RHB Middle / Finisher",
+    "impact": "Rare composure under fire; 40.6 Avg, 181.2 SR, and 45.5% clutch consistency."
+  },
+  {
+    "striker_id": 4260,
+    "striker_name": "Heinrich Klaasen",
+    "base_runs": 2363,
+    "base_balls": 1417,
+    "base_dismissals": 59,
+    "base_dots": 363,
+    "base_fours": 169,
+    "base_sixes": 136,
+    "base_matches": 72,
+    "base_sr": 166.7607621736062,
+    "base_avg": 40.05084745762712,
+    "hp_runs": 970,
+    "hp_balls": 514,
+    "hp_dismissals": 32,
+    "hp_dots": 124,
+    "hp_fours": 65,
+    "hp_sixes": 68,
+    "hp_matches": 47,
+    "hp_runs_above_exp": 206.31153481143983,
+    "hp_weighted_runs": 954.1,
+    "mean_pi": 0.6917741614320987,
+    "hp_sr": 188.715953307393,
+    "hp_avg": 30.3125,
+    "hp_dot_pct": 24.12451361867704,
+    "hp_bnd_pct": 25.87548638132296,
+    "clutch_inns": 23,
+    "total_hp_inns": 47,
+    "clutch_consistency": 48.93617021276596,
+    "delta_sr": 21.9551911337868,
+    "delta_avg": -9.73834745762712,
+    "dot_suppression": 75.87548638132296,
+    "shrunk_hp_sr": 185.72695035460995,
+    "shrunk_hp_avg": 29.857142857142858,
+    "comp_exec": 71.24948122366695,
+    "comp_delta": 48.63613804660794,
+    "comp_value": 85.12242548295048,
+    "comp_cons": 78.59697203600373,
+    "Pressure_Score": 70.53387965669044,
+    "is_ipl": true,
+    "role": "Spin Demolisher / High RRR",
+    "style": "RHB #4 / #5",
+    "impact": "Destroys spin choke in overs 11-16, setting up impossible chases."
+  },
+  {
+    "striker_id": 3125,
+    "striker_name": "Nicholas Pooran",
+    "base_runs": 3098,
+    "base_balls": 1973,
+    "base_dismissals": 94,
+    "base_dots": 717,
+    "base_fours": 210,
+    "base_sixes": 222,
+    "base_matches": 115,
+    "base_sr": 157.01976685250887,
+    "base_avg": 32.95744680851064,
+    "hp_runs": 911,
+    "hp_balls": 491,
+    "hp_dismissals": 29,
+    "hp_dots": 145,
+    "hp_fours": 63,
+    "hp_sixes": 68,
+    "hp_matches": 46,
+    "hp_runs_above_exp": 173.82227445568972,
+    "hp_weighted_runs": 897.7,
+    "mean_pi": 0.686401671007032,
+    "hp_sr": 185.5397148676171,
+    "hp_avg": 31.41379310344828,
+    "hp_dot_pct": 29.531568228105908,
+    "hp_bnd_pct": 26.680244399185337,
+    "clutch_inns": 22,
+    "total_hp_inns": 46,
+    "clutch_consistency": 47.82608695652174,
+    "delta_sr": 28.51994801510824,
+    "delta_avg": -1.543653705062361,
+    "dot_suppression": 70.46843177189409,
+    "shrunk_hp_sr": 182.71719038817005,
+    "shrunk_hp_avg": 30.8125,
+    "comp_exec": 67.53633255567829,
+    "comp_delta": 62.84258688993238,
+    "comp_value": 75.15805712660149,
+    "comp_cons": 74.82064055704902,
+    "Pressure_Score": 69.72518888224675,
+    "is_ipl": true,
+    "role": "High-Tempo LHB Finisher",
+    "style": "LHB #4 / #5",
+    "impact": "Left-handed dynamic counter-puncher with +28.5 Delta SR in crunch situations."
+  },
+  {
+    "striker_id": 37052,
+    "striker_name": "Naman Dhir",
+    "base_runs": 992,
+    "base_balls": 589,
+    "base_dismissals": 35,
+    "base_dots": 184,
+    "base_fours": 94,
+    "base_sixes": 53,
+    "base_matches": 46,
+    "base_sr": 168.42105263157893,
+    "base_avg": 28.34285714285714,
+    "hp_runs": 405,
+    "hp_balls": 202,
+    "hp_dismissals": 13,
+    "hp_dots": 49,
+    "hp_fours": 37,
+    "hp_sixes": 24,
+    "hp_matches": 22,
+    "hp_runs_above_exp": 93.43813562054729,
+    "hp_weighted_runs": 392.5,
+    "mean_pi": 0.7440903160233481,
+    "hp_sr": 200.4950495049505,
+    "hp_avg": 31.153846153846157,
+    "hp_dot_pct": 24.257425742574256,
+    "hp_bnd_pct": 30.1980198019802,
+    "clutch_inns": 12,
+    "total_hp_inns": 22,
+    "clutch_consistency": 54.54545454545454,
+    "delta_sr": 32.07399687337156,
+    "delta_avg": 2.810989010989012,
+    "dot_suppression": 75.74257425742574,
+    "shrunk_hp_sr": 191.468253968254,
+    "shrunk_hp_avg": 30.0,
+    "comp_exec": 79.50383930650138,
+    "comp_delta": 70.48423175117617,
+    "comp_value": 50.50445896552503,
+    "comp_cons": 59.99999999875765,
+    "Pressure_Score": 66.09832447087723,
+    "is_ipl": true,
+    "role": "Emerging Power Slogger",
+    "style": "RHB Finisher",
+    "impact": "Highest breakthrough upside; strikes at 200.5 under pressure with 54.5% consistency."
+  },
+  {
+    "striker_id": 813,
+    "striker_name": "Jos Buttler",
+    "base_runs": 4396,
+    "base_balls": 2829,
+    "base_dismissals": 106,
+    "base_dots": 969,
+    "base_fours": 431,
+    "base_sixes": 204,
+    "base_matches": 121,
+    "base_sr": 155.3905973842347,
+    "base_avg": 41.471698113207545,
+    "hp_runs": 526,
+    "hp_balls": 265,
+    "hp_dismissals": 19,
+    "hp_dots": 64,
+    "hp_fours": 52,
+    "hp_sixes": 28,
+    "hp_matches": 28,
+    "hp_runs_above_exp": 118.47687487838311,
+    "hp_weighted_runs": 514.5,
+    "mean_pi": 0.6728777280470117,
+    "hp_sr": 198.49056603773585,
+    "hp_avg": 27.68421052631579,
+    "hp_dot_pct": 24.150943396226417,
+    "hp_bnd_pct": 30.18867924528302,
+    "clutch_inns": 11,
+    "total_hp_inns": 28,
+    "clutch_consistency": 39.285714285714285,
+    "delta_sr": 43.09996865350115,
+    "delta_avg": -13.787487586891752,
+    "dot_suppression": 75.84905660377359,
+    "shrunk_hp_sr": 191.5873015873016,
+    "shrunk_hp_avg": 27.318181818181817,
+    "comp_exec": 77.90712082814537,
+    "comp_delta": 75.98248444489549,
+    "comp_value": 58.18377263446472,
+    "comp_cons": 43.67608496129337,
+    "Pressure_Score": 65.64891751054233,
+    "is_ipl": true,
+    "role": "Chamber of Clutch",
+    "style": "RHB Opener / Keeper",
+    "impact": "Proven century-maker in playoff games; +43.1 Delta SR under high pressure."
+  },
+  {
+    "striker_id": 2756,
+    "striker_name": "Shashank Singh",
+    "base_runs": 905,
+    "base_balls": 560,
+    "base_dismissals": 24,
+    "base_dots": 155,
+    "base_fours": 67,
+    "base_sixes": 51,
+    "base_matches": 42,
+    "base_sr": 161.60714285714286,
+    "base_avg": 37.708333333333336,
+    "hp_runs": 618,
+    "hp_balls": 335,
+    "hp_dismissals": 11,
+    "hp_dots": 81,
+    "hp_fours": 49,
+    "hp_sixes": 37,
+    "hp_matches": 30,
+    "hp_runs_above_exp": 118.69623658604748,
+    "hp_weighted_runs": 618.0,
+    "mean_pi": 0.7562276461152492,
+    "hp_sr": 184.4776119402985,
+    "hp_avg": 56.18181818181818,
+    "hp_dot_pct": 24.17910447761194,
+    "hp_bnd_pct": 25.67164179104477,
+    "clutch_inns": 12,
+    "total_hp_inns": 30,
+    "clutch_consistency": 40.0,
+    "delta_sr": 22.87046908315565,
+    "delta_avg": 18.473484848484844,
+    "dot_suppression": 75.82089552238806,
+    "shrunk_hp_sr": 180.64935064935065,
+    "shrunk_hp_avg": 49.5,
+    "comp_exec": 80.72597668641413,
+    "comp_delta": 66.98792689511158,
+    "comp_value": 58.25105027743077,
+    "comp_cons": 50.16874585684457,
+    "Pressure_Score": 65.56128647042874,
+    "is_ipl": true,
+    "role": "Crisis Rescuer / Finisher",
+    "style": "RHB Finisher",
+    "impact": "Highest crisis average in T20 (56.2 Avg) at 184.5 SR; pure ice under pressure."
+  },
+  {
+    "striker_id": 3647,
+    "striker_name": "Shreyas Iyer",
+    "base_runs": 2856,
+    "base_balls": 1865,
+    "base_dismissals": 78,
+    "base_dots": 539,
+    "base_fours": 237,
+    "base_sixes": 134,
+    "base_matches": 98,
+    "base_sr": 153.1367292225201,
+    "base_avg": 36.61538461538461,
+    "hp_runs": 557,
+    "hp_balls": 284,
+    "hp_dismissals": 22,
+    "hp_dots": 66,
+    "hp_fours": 37,
+    "hp_sixes": 41,
+    "hp_matches": 30,
+    "hp_runs_above_exp": 131.1576668697137,
+    "hp_weighted_runs": 536.9000000000001,
+    "mean_pi": 0.6810205820894603,
+    "hp_sr": 196.1267605633803,
+    "hp_avg": 25.318181818181817,
+    "hp_dot_pct": 23.239436619718308,
+    "hp_bnd_pct": 27.464788732394368,
+    "clutch_inns": 11,
+    "total_hp_inns": 30,
+    "clutch_consistency": 36.66666666666666,
+    "delta_sr": 42.990031340860185,
+    "delta_avg": -11.297202797202797,
+    "dot_suppression": 76.7605633802817,
+    "shrunk_hp_sr": 189.97005988023952,
+    "shrunk_hp_avg": 25.28,
+    "comp_exec": 73.13025701094924,
+    "comp_delta": 77.33365583052301,
+    "comp_value": 62.072937271279685,
+    "comp_cons": 41.6301381598125,
+    "Pressure_Score": 65.11675301069795,
+    "is_ipl": true,
+    "role": "Knockout Counter-Puncher",
+    "style": "RHB Captain / Middle",
+    "impact": "Massive big-game elevation (+43.0 Delta SR); captain who leads from the front."
+  },
+  {
+    "striker_id": 3916,
+    "striker_name": "Jitesh Sharma",
+    "base_runs": 1389,
+    "base_balls": 895,
+    "base_dismissals": 59,
+    "base_dots": 319,
+    "base_fours": 111,
+    "base_sixes": 83,
+    "base_matches": 73,
+    "base_sr": 155.19553072625698,
+    "base_avg": 23.54237288135593,
+    "hp_runs": 688,
+    "hp_balls": 363,
+    "hp_dismissals": 27,
+    "hp_dots": 107,
+    "hp_fours": 54,
+    "hp_sixes": 47,
+    "hp_matches": 39,
+    "hp_runs_above_exp": 123.25100347463956,
+    "hp_weighted_runs": 657.9,
+    "mean_pi": 0.7152521846130029,
+    "hp_sr": 189.53168044077137,
+    "hp_avg": 25.48148148148148,
+    "hp_dot_pct": 29.47658402203857,
+    "hp_bnd_pct": 27.82369146005509,
+    "clutch_inns": 17,
+    "total_hp_inns": 39,
+    "clutch_consistency": 43.58974358974359,
+    "delta_sr": 34.33614971451439,
+    "delta_avg": 1.9391086001255504,
+    "dot_suppression": 70.52341597796143,
+    "shrunk_hp_sr": 185.3510895883777,
+    "shrunk_hp_avg": 25.433333333333334,
+    "comp_exec": 66.92946667800035,
+    "comp_delta": 73.1445421932677,
+    "comp_value": 59.6479849739512,
+    "comp_cons": 57.77789397824004,
+    "Pressure_Score": 64.83255059085283,
+    "is_ipl": true,
+    "role": "Attacking Keeper-Finisher",
+    "style": "RHB #6",
+    "impact": "High-tempo intent from ball one; 189.5 HP SR and 34.3 Delta SR."
+  },
+  {
+    "striker_id": 4703,
+    "striker_name": "Rishabh Pant",
+    "base_runs": 1774,
+    "base_balls": 1240,
+    "base_dismissals": 58,
+    "base_dots": 443,
+    "base_fours": 171,
+    "base_sixes": 78,
+    "base_matches": 73,
+    "base_sr": 143.06451612903226,
+    "base_avg": 30.58620689655172,
+    "hp_runs": 487,
+    "hp_balls": 259,
+    "hp_dismissals": 18,
+    "hp_dots": 78,
+    "hp_fours": 42,
+    "hp_sixes": 32,
+    "hp_matches": 29,
+    "hp_runs_above_exp": 94.23828662232717,
+    "hp_weighted_runs": 478.7000000000001,
+    "mean_pi": 0.6727346996226466,
+    "hp_sr": 188.03088803088804,
+    "hp_avg": 27.05555555555556,
+    "hp_dot_pct": 30.11583011583012,
+    "hp_bnd_pct": 28.57142857142857,
+    "clutch_inns": 13,
+    "total_hp_inns": 29,
+    "clutch_consistency": 44.82758620689656,
+    "delta_sr": 44.96637190185578,
+    "delta_avg": -3.5306513409961653,
+    "dot_suppression": 69.88416988416988,
+    "shrunk_hp_sr": 182.68608414239483,
+    "shrunk_hp_avg": 26.761904761904763,
+    "comp_exec": 66.719506067665,
+    "comp_delta": 84.81561280875545,
+    "comp_value": 50.74986311554672,
+    "comp_cons": 50.42222386221139,
+    "Pressure_Score": 63.99166557381732,
+    "is_ipl": true,
+    "role": "Middle Order Batter",
+    "style": "RHB",
+    "impact": "Proven pressure performer."
+  }
+];
+const bowlersData = [
+  {
+    "bowler_id": 2933,
+    "bowler_name": "Jasprit Bumrah",
+    "base_runs": 1952,
+    "base_balls": 1709,
+    "base_wkts": 85,
+    "base_dots": 768,
+    "base_matches": 75,
+    "base_econ": 6.85313048566413,
+    "base_sr": 20.105882352941176,
+    "hp_runs_conceded": 666,
+    "hp_balls": 579,
+    "hp_wkts": 44,
+    "hp_dots": 218,
+    "hp_fours": 52,
+    "hp_sixes": 20,
+    "hp_matches": 59,
+    "hp_runs_saved": 232.0320435032847,
+    "hp_wkts_above_exp": 2.685379959686291,
+    "mean_pi": 0.7731243850748274,
+    "hp_econ": 6.901554404145078,
+    "hp_sr": 13.159090909090908,
+    "hp_dot_pct": 37.65112262521589,
+    "hp_bnd_pct": 12.43523316062176,
+    "clutch_spells": 43,
+    "total_hp_spells": 59,
+    "clutch_consistency": 72.88135593220339,
+    "shrunk_hp_econ": 7.098591549295774,
+    "shrunk_hp_sr": 13.233727810650889,
+    "delta_econ": -0.0484239184809478,
+    "bnd_suppression": 87.56476683937824,
+    "comp_exec": 68.74003124666996,
+    "comp_delta": 49.21265125535673,
+    "comp_value": 77.5490254233411,
+    "comp_cons": 71.63952428745047,
+    "Pressure_Score": 66.64033340116553,
+    "is_ipl": true,
+    "role": "Unhittable Death Enforcer",
+    "style": "Right-arm Fast",
+    "impact": "The greatest pressure bowler: 6.90 HP Econ, 232 runs saved above par, 72.9% clutch spells."
+  },
+  {
+    "bowler_id": 8661,
+    "bowler_name": "Matheesha Pathirana",
+    "base_runs": 1475,
+    "base_balls": 1135,
+    "base_wkts": 82,
+    "base_dots": 423,
+    "base_matches": 54,
+    "base_econ": 7.797356828193833,
+    "base_sr": 13.841463414634148,
+    "hp_runs_conceded": 663,
+    "hp_balls": 520,
+    "hp_wkts": 49,
+    "hp_dots": 199,
+    "hp_fours": 54,
+    "hp_sixes": 25,
+    "hp_matches": 42,
+    "hp_runs_saved": 132.6946798796335,
+    "hp_wkts_above_exp": 10.26968820050255,
+    "mean_pi": 0.7691657931764372,
+    "hp_econ": 7.649999999999999,
+    "hp_sr": 10.612244897959185,
+    "hp_dot_pct": 38.26923076923077,
+    "hp_bnd_pct": 15.192307692307692,
+    "clutch_spells": 28,
+    "total_hp_spells": 42,
+    "clutch_consistency": 66.66666666666666,
+    "shrunk_hp_econ": 7.789655172413793,
+    "shrunk_hp_sr": 10.884718498659518,
+    "delta_econ": 0.1473568281938337,
+    "bnd_suppression": 84.8076923076923,
+    "comp_exec": 66.70166111267676,
+    "comp_delta": 52.6318230756022,
+    "comp_value": 75.39720624978744,
+    "comp_cons": 58.72955759902646,
+    "Pressure_Score": 63.76366718495573,
+    "is_ipl": true,
+    "role": "Slingy Yorker Weapon",
+    "style": "Right-arm Slinger",
+    "impact": "Most lethal death overs strike rate (10.6 balls/wkt); 49 HP wkts at 7.65 Econ."
+  },
+  {
+    "bowler_id": 781,
+    "bowler_name": "Sunil Narine",
+    "base_runs": 1727,
+    "base_balls": 1533,
+    "base_wkts": 66,
+    "base_dots": 584,
+    "base_matches": 67,
+    "base_econ": 6.759295499021527,
+    "base_sr": 23.227272727272727,
+    "hp_runs_conceded": 335,
+    "hp_balls": 317,
+    "hp_wkts": 26,
+    "hp_dots": 127,
+    "hp_fours": 16,
+    "hp_sixes": 15,
+    "hp_matches": 39,
+    "hp_runs_saved": 109.7184462668219,
+    "hp_wkts_above_exp": 6.059038024508208,
+    "mean_pi": 0.7022893266143554,
+    "hp_econ": 6.340694006309149,
+    "hp_sr": 12.192307692307692,
+    "hp_dot_pct": 40.063091482649845,
+    "hp_bnd_pct": 9.779179810725552,
+    "clutch_spells": 27,
+    "total_hp_spells": 39,
+    "clutch_consistency": 69.23076923076923,
+    "shrunk_hp_econ": 6.763925729442971,
+    "shrunk_hp_sr": 12.44811320754717,
+    "delta_econ": 0.4186014927123782,
+    "bnd_suppression": 90.22082018927443,
+    "comp_exec": 75.52728037585797,
+    "comp_delta": 58.160611335054895,
+    "comp_value": 63.377323900230834,
+    "comp_cons": 48.80619493694927,
+    "Pressure_Score": 62.80390690896867,
+    "is_ipl": true,
+    "role": "Mystery Spin Choke",
+    "style": "Right-arm Off-break Mystery",
+    "impact": "Concedes only 6.34 Econ in high pressure (+0.42 Delta resilience); completely suffocates runs."
+  },
+  {
+    "bowler_id": 4722,
+    "bowler_name": "Rashid Khan",
+    "base_runs": 3357,
+    "base_balls": 2747,
+    "base_wkts": 153,
+    "base_dots": 985,
+    "base_matches": 122,
+    "base_econ": 7.332362577357117,
+    "base_sr": 17.954248366013072,
+    "hp_runs_conceded": 970,
+    "hp_balls": 742,
+    "hp_wkts": 63,
+    "hp_dots": 280,
+    "hp_fours": 45,
+    "hp_sixes": 65,
+    "hp_matches": 80,
+    "hp_runs_saved": 70.25508733526986,
+    "hp_wkts_above_exp": 14.307920936597249,
+    "mean_pi": 0.7227261209521381,
+    "hp_econ": 7.84366576819407,
+    "hp_sr": 11.77777777777778,
+    "hp_dot_pct": 37.735849056603776,
+    "hp_bnd_pct": 14.824797843665769,
+    "clutch_spells": 53,
+    "total_hp_spells": 80,
+    "clutch_consistency": 66.25,
+    "shrunk_hp_econ": 7.930174563591023,
+    "shrunk_hp_sr": 11.91932059447983,
+    "delta_econ": -0.5113031908369532,
+    "bnd_suppression": 85.17520215633424,
+    "comp_exec": 63.61981757471575,
+    "comp_delta": 42.43443152091859,
+    "comp_value": 72.6365279206641,
+    "comp_cons": 64.97487437078836,
+    "Pressure_Score": 60.84866000696807,
+    "is_ipl": true,
+    "role": "High-Leverage Leg-Spinner",
+    "style": "Right-arm Leg-break",
+    "impact": "Highest pressure wicket volume (63 wkts in 742 balls); breaks partnerships at will."
+  },
+  {
+    "bowler_id": 25048,
+    "bowler_name": "Umran Malik",
+    "base_runs": 859,
+    "base_balls": 564,
+    "base_wkts": 38,
+    "base_dots": 241,
+    "base_matches": 31,
+    "base_econ": 9.138297872340424,
+    "base_sr": 14.842105263157896,
+    "hp_runs_conceded": 193,
+    "hp_balls": 151,
+    "hp_wkts": 15,
+    "hp_dots": 75,
+    "hp_fours": 22,
+    "hp_sixes": 9,
+    "hp_matches": 17,
+    "hp_runs_saved": 25.34960112293621,
+    "hp_wkts_above_exp": 4.910189972903687,
+    "mean_pi": 0.7274815539489998,
+    "hp_econ": 7.668874172185431,
+    "hp_sr": 10.066666666666666,
+    "hp_dot_pct": 49.66887417218543,
+    "hp_bnd_pct": 20.52980132450331,
+    "clutch_spells": 9,
+    "total_hp_spells": 17,
+    "clutch_consistency": 52.94117647058824,
+    "shrunk_hp_econ": 8.04739336492891,
+    "shrunk_hp_sr": 10.940740740740742,
+    "delta_econ": 1.4694237001549943,
+    "bnd_suppression": 79.47019867549669,
+    "comp_exec": 66.02914733300481,
+    "comp_delta": 81.82266106825348,
+    "comp_value": 46.88770610916998,
+    "comp_cons": 25.82323381571389,
+    "Pressure_Score": 57.15098275740009,
+    "is_ipl": true,
+    "role": "Raw Velocity Shock Weapon",
+    "style": "Right-arm Express 150+",
+    "impact": "Massive +1.47 economy improvement under pressure; 7.67 HP Econ and 10.1 strike rate."
+  },
+  {
+    "bowler_id": 4101,
+    "bowler_name": "Mitchell Santner",
+    "base_runs": 2084,
+    "base_balls": 1737,
+    "base_wkts": 86,
+    "base_dots": 653,
+    "base_matches": 83,
+    "base_econ": 7.198618307426598,
+    "base_sr": 20.19767441860465,
+    "hp_runs_conceded": 425,
+    "hp_balls": 372,
+    "hp_wkts": 22,
+    "hp_dots": 141,
+    "hp_fours": 22,
+    "hp_sixes": 22,
+    "hp_matches": 38,
+    "hp_runs_saved": 78.02150932280217,
+    "hp_wkts_above_exp": 0.3912595152674666,
+    "mean_pi": 0.7101876019291874,
+    "hp_econ": 6.85483870967742,
+    "hp_sr": 16.90909090909091,
+    "hp_dot_pct": 37.903225806451616,
+    "hp_bnd_pct": 11.827956989247312,
+    "clutch_spells": 27,
+    "total_hp_spells": 38,
+    "clutch_consistency": 71.05263157894737,
+    "shrunk_hp_econ": 7.152777777777777,
+    "shrunk_hp_sr": 16.434782608695652,
+    "delta_econ": 0.3437795977491777,
+    "bnd_suppression": 88.17204301075269,
+    "comp_exec": 62.50725912383132,
+    "comp_delta": 55.2294413584892,
+    "comp_value": 47.067695165890285,
+    "comp_cons": 55.142611178495095,
+    "Pressure_Score": 55.35498410394329,
+    "is_ipl": true,
+    "role": "Defensive Finger Spin",
+    "style": "Slow Left-arm Orthodox",
+    "impact": "Ice-cool tactical controller; 6.85 HP Econ, +78 runs saved, 71.1% clutch consistency."
+  },
+  {
+    "bowler_id": 6256,
+    "bowler_name": "Varun Chakravarthy",
+    "base_runs": 2770,
+    "base_balls": 2128,
+    "base_wkts": 134,
+    "base_dots": 835,
+    "base_matches": 95,
+    "base_econ": 7.81015037593985,
+    "base_sr": 15.880597014925373,
+    "hp_runs_conceded": 803,
+    "hp_balls": 584,
+    "hp_wkts": 43,
+    "hp_dots": 233,
+    "hp_fours": 37,
+    "hp_sixes": 60,
+    "hp_matches": 62,
+    "hp_runs_saved": 15.954252759988533,
+    "hp_wkts_above_exp": 7.182557358279141,
+    "mean_pi": 0.7053849798443412,
+    "hp_econ": 8.25,
+    "hp_sr": 13.581395348837209,
+    "hp_dot_pct": 39.8972602739726,
+    "hp_bnd_pct": 16.60958904109589,
+    "clutch_spells": 40,
+    "total_hp_spells": 62,
+    "clutch_consistency": 64.51612903225806,
+    "shrunk_hp_econ": 8.319875776397517,
+    "shrunk_hp_sr": 13.619335347432024,
+    "delta_econ": -0.4398496240601499,
+    "bnd_suppression": 83.39041095890411,
+    "comp_exec": 57.10853005840168,
+    "comp_delta": 45.31706154960257,
+    "comp_value": 49.68802262399196,
+    "comp_cons": 58.87900678528993,
+    "Pressure_Score": 52.65963141797712,
+    "is_ipl": true,
+    "role": "Mystery Spin Breaker",
+    "style": "Right-arm Leg-break Mystery",
+    "impact": "43 HP wickets with 13.6 strike rate; deceives high-pressure hitters in middle/death."
+  },
+  {
+    "bowler_id": 7327,
+    "bowler_name": "Rasikh Salam",
+    "base_runs": 832,
+    "base_balls": 542,
+    "base_wkts": 38,
+    "base_dots": 185,
+    "base_matches": 28,
+    "base_econ": 9.210332103321033,
+    "base_sr": 14.263157894736842,
+    "hp_runs_conceded": 322,
+    "hp_balls": 220,
+    "hp_wkts": 25,
+    "hp_dots": 74,
+    "hp_fours": 26,
+    "hp_sixes": 16,
+    "hp_matches": 20,
+    "hp_runs_saved": 7.16822533165938,
+    "hp_wkts_above_exp": 8.501723288473023,
+    "mean_pi": 0.7853442324172281,
+    "hp_econ": 8.781818181818181,
+    "hp_sr": 8.8,
+    "hp_dot_pct": 33.63636363636363,
+    "hp_bnd_pct": 19.090909090909093,
+    "clutch_spells": 12,
+    "total_hp_spells": 20,
+    "clutch_consistency": 60.0,
+    "shrunk_hp_econ": 8.82857142857143,
+    "shrunk_hp_sr": 9.560975609756095,
+    "delta_econ": 0.4285139215028515,
+    "bnd_suppression": 80.9090909090909,
+    "comp_exec": 57.08428232176253,
+    "comp_delta": 52.88011631131928,
+    "comp_value": 50.7501259865369,
+    "comp_cons": 32.804020099961825,
+    "Pressure_Score": 49.59364929098518,
+    "is_ipl": true,
+    "role": "Death Yorker Striker",
+    "style": "Right-arm Fast-Medium",
+    "impact": "Sensational 8.80 balls per wicket in crunch situations; slower ball & yorker accuracy."
+  },
+  {
+    "bowler_id": 36982,
+    "bowler_name": "Suyash Sharma",
+    "base_runs": 1266,
+    "base_balls": 900,
+    "base_wkts": 32,
+    "base_dots": 309,
+    "base_matches": 43,
+    "base_econ": 8.440000000000001,
+    "base_sr": 28.125,
+    "hp_runs_conceded": 288,
+    "hp_balls": 233,
+    "hp_wkts": 12,
+    "hp_dots": 98,
+    "hp_fours": 16,
+    "hp_sixes": 19,
+    "hp_matches": 23,
+    "hp_runs_saved": 31.103258290881023,
+    "hp_wkts_above_exp": -2.0343814033728496,
+    "mean_pi": 0.7168757690881085,
+    "hp_econ": 7.416309012875537,
+    "hp_sr": 19.416666666666668,
+    "hp_dot_pct": 42.06008583690987,
+    "hp_bnd_pct": 15.021459227467812,
+    "clutch_spells": 14,
+    "total_hp_spells": 23,
+    "clutch_consistency": 60.86956521739131,
+    "shrunk_hp_econ": 7.74061433447099,
+    "shrunk_hp_sr": 17.99122807017544,
+    "delta_econ": 1.0236909871244642,
+    "bnd_suppression": 84.97854077253218,
+    "comp_exec": 54.73215399207015,
+    "comp_delta": 68.80123429426402,
+    "comp_value": 34.44624154888725,
+    "comp_cons": 33.6639720335286,
+    "Pressure_Score": 48.96430956511458,
+    "is_ipl": true,
+    "role": "Attacking Wrist-Spin",
+    "style": "Right-arm Leg-break",
+    "impact": "Tightens up by +1.02 rpo under pressure (7.42 HP Econ); saves 31 runs above par."
+  },
+  {
+    "bowler_id": 4900,
+    "bowler_name": "Wanindu Hasaranga",
+    "base_runs": 2668,
+    "base_balls": 2035,
+    "base_wkts": 133,
+    "base_dots": 713,
+    "base_matches": 91,
+    "base_econ": 7.866339066339067,
+    "base_sr": 15.300751879699249,
+    "hp_runs_conceded": 621,
+    "hp_balls": 435,
+    "hp_wkts": 43,
+    "hp_dots": 154,
+    "hp_fours": 27,
+    "hp_sixes": 45,
+    "hp_matches": 50,
+    "hp_runs_saved": -11.557985841037876,
+    "hp_wkts_above_exp": 14.10131349648023,
+    "mean_pi": 0.7112040567947157,
+    "hp_econ": 8.565517241379311,
+    "hp_sr": 10.116279069767442,
+    "hp_dot_pct": 35.40229885057472,
+    "hp_bnd_pct": 16.551724137931036,
+    "clutch_spells": 25,
+    "total_hp_spells": 50,
+    "clutch_consistency": 50.0,
+    "shrunk_hp_econ": 8.618181818181817,
+    "shrunk_hp_sr": 10.468277945619336,
+    "delta_econ": -0.6991781750402444,
+    "bnd_suppression": 83.44827586206897,
+    "comp_exec": 59.24903075910628,
+    "comp_delta": 37.68361066363193,
+    "comp_value": 58.39930443381855,
+    "comp_cons": 31.242693337159626,
+    "Pressure_Score": 48.04397666952642,
+    "is_ipl": true,
+    "role": "Clutch Middle Overs Game-Breaker",
+    "style": "Right-arm Leg-break",
+    "impact": "10.1 strike rate under pressure (43 wkts in 435 balls); game-breaking wicket magnet."
+  },
+  {
+    "bowler_id": 6628,
+    "bowler_name": "Gerald Coetzee",
+    "base_runs": 878,
+    "base_balls": 594,
+    "base_wkts": 35,
+    "base_dots": 247,
+    "base_matches": 29,
+    "base_econ": 8.868686868686869,
+    "base_sr": 16.97142857142857,
+    "hp_runs_conceded": 228,
+    "hp_balls": 164,
+    "hp_wkts": 12,
+    "hp_dots": 62,
+    "hp_fours": 19,
+    "hp_sixes": 11,
+    "hp_matches": 21,
+    "hp_runs_saved": 24.066039568548295,
+    "hp_wkts_above_exp": 0.3570007978416695,
+    "mean_pi": 0.7392257663913808,
+    "hp_econ": 8.341463414634145,
+    "hp_sr": 13.666666666666666,
+    "hp_dot_pct": 37.80487804878049,
+    "hp_bnd_pct": 18.29268292682927,
+    "clutch_spells": 14,
+    "total_hp_spells": 21,
+    "clutch_consistency": 66.66666666666666,
+    "shrunk_hp_econ": 8.517857142857142,
+    "shrunk_hp_sr": 13.75438596491228,
+    "delta_econ": 0.5272234540527236,
+    "bnd_suppression": 81.70731707317073,
+    "comp_exec": 53.39172830289383,
+    "comp_delta": 57.86102396987598,
+    "comp_value": 37.875317629869656,
+    "comp_cons": 39.39698492397375,
+    "Pressure_Score": 47.83100087559932,
+    "is_ipl": true,
+    "role": "Specialist Bowler",
+    "style": "Pace/Spin",
+    "impact": "Proven pressure bowler."
+  },
+  {
+    "bowler_id": 3644,
+    "bowler_name": "Kuldeep Yadav",
+    "base_runs": 2502,
+    "base_balls": 1914,
+    "base_wkts": 118,
+    "base_dots": 650,
+    "base_matches": 89,
+    "base_econ": 7.843260188087775,
+    "base_sr": 16.220338983050848,
+    "hp_runs_conceded": 632,
+    "hp_balls": 449,
+    "hp_wkts": 37,
+    "hp_dots": 158,
+    "hp_fours": 29,
+    "hp_sixes": 44,
+    "hp_matches": 52,
+    "hp_runs_saved": 3.7614929079805473,
+    "hp_wkts_above_exp": 8.862774050004557,
+    "mean_pi": 0.6996100569732969,
+    "hp_econ": 8.445434298440981,
+    "hp_sr": 12.135135135135137,
+    "hp_dot_pct": 35.18930957683742,
+    "hp_bnd_pct": 16.258351893095767,
+    "clutch_spells": 29,
+    "total_hp_spells": 52,
+    "clutch_consistency": 55.76923076923077,
+    "shrunk_hp_econ": 8.510805500982318,
+    "shrunk_hp_sr": 12.328719723183392,
+    "delta_econ": -0.6021741103532063,
+    "bnd_suppression": 83.74164810690424,
+    "comp_exec": 56.47315387566888,
+    "comp_delta": 38.93923071457545,
+    "comp_value": 50.87133317701233,
+    "comp_cons": 39.64470797413574,
+    "Pressure_Score": 47.32352873042476,
+    "is_ipl": true,
+    "role": "Specialist Bowler",
+    "style": "Pace/Spin",
+    "impact": "Proven pressure bowler."
+  }
+];
+const rrData = [
+  {
+    "name": "Dhruv Jurel",
+    "type": "Bat",
+    "role": "Finisher / WK",
+    "hp_balls": 295,
+    "hp_sr": 182.4,
+    "hp_avg": 38.4,
+    "delta_sr": "+31.1",
+    "status": "Retained Asset (Core Clutch)",
+    "note": "Ranks #14 overall. Core domestic pressure engine."
+  },
+  {
+    "name": "Jos Buttler",
+    "type": "Bat",
+    "role": "Opener / WK",
+    "hp_balls": 265,
+    "hp_sr": 198.5,
+    "hp_avg": 27.7,
+    "delta_sr": "+43.1",
+    "status": "Key Target / Franchise Legend",
+    "note": "Unmatched playoff and high-pressure chase pedigree."
+  },
+  {
+    "name": "Sanju Samson",
+    "type": "Bat",
+    "role": "Captain / #3",
+    "hp_balls": 219,
+    "hp_sr": 189.0,
+    "hp_avg": 31.8,
+    "delta_sr": "+34.4",
+    "status": "Retained Captain",
+    "note": "Aggressive counter-attacker in powerplay and middle overs."
+  },
+  {
+    "name": "Shimron Hetmyer",
+    "type": "Bat",
+    "role": "Overseas Finisher",
+    "hp_balls": 618,
+    "hp_sr": 164.7,
+    "hp_avg": 23.1,
+    "delta_sr": "+13.1",
+    "status": "Retained Asset",
+    "note": "Solid volume, but strike rate slows against elite death yorkers."
+  },
+  {
+    "name": "Riyan Parag",
+    "type": "Bat",
+    "role": "Middle Order (#4)",
+    "hp_balls": 311,
+    "hp_sr": 165.9,
+    "hp_avg": 15.2,
+    "delta_sr": "+14.4",
+    "status": "Retained Core",
+    "note": "High potential spin-hitter; needs dismissal insulation in crisis."
+  },
+  {
+    "name": "Sandeep Sharma",
+    "type": "Bowl",
+    "role": "Death Bowler",
+    "hp_balls": 338,
+    "hp_econ": 10.9,
+    "hp_sr": 16.1,
+    "delta_econ": "-2.20",
+    "status": "Retained Specialist",
+    "note": "Leaks 10.90 rpo in high pressure; needs high-pace yorker partner."
+  },
+  {
+    "name": "Tushar Deshpande",
+    "type": "Bowl",
+    "role": "Pace",
+    "hp_balls": 294,
+    "hp_econ": 11.55,
+    "hp_sr": 10.5,
+    "delta_econ": "-2.10",
+    "status": "Squad Asset",
+    "note": "Takes wickets but leaks heavily (-93.1 runs saved). Extreme volatility."
+  },
+  {
+    "name": "Trent Boult",
+    "type": "Bowl",
+    "role": "New Ball Pace",
+    "hp_balls": 336,
+    "hp_econ": 9.64,
+    "hp_sr": 14.0,
+    "delta_econ": "-1.50",
+    "status": "Key Pacer",
+    "note": "World-class in PP (overs 1-3); should not be bowled in overs 18-20."
+  },
+  {
+    "name": "Wanindu Hasaranga",
+    "type": "Bowl",
+    "role": "Clutch Leg-Spinner",
+    "hp_balls": 435,
+    "hp_econ": 8.57,
+    "hp_sr": 10.1,
+    "delta_econ": "-0.70",
+    "status": "RR 2025/2026 Target",
+    "note": "Elite 10.1 strike rate under pressure; 43 wickets in 435 balls."
+  }
+];
+
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  
+  document.getElementById('tab-' + tabId).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function renderBatters() {
+  const tbody = document.querySelector('#bat-table tbody');
+  tbody.innerHTML = '';
+  battersData.slice(0, 10).forEach((b, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="rank-badge ${i < 3 ? 'top3' : ''}">${i + 1}</span></td>
+      <td>
+        <div class="player-name-cell">${b.striker_name}</div>
+        <div class="player-role-cell">${b.style}</div>
+      </td>
+      <td class="score-cell">${b.Pressure_Score.toFixed(1)}</td>
+      <td>${b.hp_runs}</td>
+      <td>${b.hp_balls}</td>
+      <td style="color:var(--rr-green); font-weight:700;">${b.hp_sr.toFixed(1)}</td>
+      <td>${b.hp_avg.toFixed(1)}</td>
+      <td class="pos-delta">+${b.delta_sr.toFixed(1)}</td>
+      <td style="color:#FFF;">+${Math.round(b.hp_runs_above_exp)}</td>
+      <td>${b.clutch_consistency.toFixed(1)}%</td>
+      <td><span class="badge-tag" style="background:#0D1117; border-color:var(--rr-card-border); color:#FFF;">${b.role}</span></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderBowlers() {
+  const tbody = document.querySelector('#bowl-table tbody');
+  tbody.innerHTML = '';
+  bowlersData.slice(0, 10).forEach((b, i) => {
+    const tr = document.createElement('tr');
+    const deltaStr = b.delta_econ >= 0 ? `+${b.delta_econ.toFixed(2)}` : b.delta_econ.toFixed(2);
+    const deltaClass = b.delta_econ >= 0 ? 'pos-delta' : '';
+    tr.innerHTML = `
+      <td><span class="rank-badge ${i < 3 ? 'top3' : ''}">${i + 1}</span></td>
+      <td>
+        <div class="player-name-cell">${b.bowler_name}</div>
+        <div class="player-role-cell">${b.style}</div>
+      </td>
+      <td class="score-cell">${b.Pressure_Score.toFixed(1)}</td>
+      <td>${b.hp_wkts}</td>
+      <td>${b.hp_balls}</td>
+      <td style="color:var(--rr-green); font-weight:700;">${b.hp_econ.toFixed(2)}</td>
+      <td>${b.hp_sr.toFixed(1)}</td>
+      <td class="${deltaClass}">${deltaStr}</td>
+      <td style="color:#FFF;">+${Math.round(b.hp_runs_saved)}</td>
+      <td>${b.clutch_consistency.toFixed(1)}%</td>
+      <td><span class="badge-tag" style="background:#0D1117; border-color:var(--rr-card-border); color:#FFF;">${b.role}</span></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function renderRRSquad() {
+  const tbody = document.querySelector('#rr-squad-body');
+  tbody.innerHTML = '';
+  rrData.forEach(p => {
+    const tr = document.createElement('tr');
+    const isBat = p.type === 'Bat';
+    const metric1 = isBat ? `SR: ${p.hp_sr}` : `Econ: ${p.hp_econ}`;
+    const metric2 = isBat ? `Avg: ${p.hp_avg}` : `SR: ${p.hp_sr}`;
+    const statusColor = p.status.includes('Target') || p.status.includes('Core') ? 'var(--rr-pink)' : 'var(--rr-gold)';
+    tr.innerHTML = `
+      <td style="font-weight:700; color:#FFF;">${p.name}</td>
+      <td>${p.role}</td>
+      <td>${p.hp_balls}</td>
+      <td style="font-weight:700; color:var(--text-main);">${metric1}</td>
+      <td>${metric2}</td>
+      <td style="font-family:var(--font-mono); font-weight:700;">${p.delta_sr || p.delta_econ}</td>
+      <td><span style="color:${statusColor}; font-weight:700; font-size:0.8rem;">${p.status}</span></td>
+      <td style="font-size:0.8rem; color:#9CA3AF;">${p.note}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function filterTable(tableId, inputId) {
+  const input = document.getElementById(inputId);
+  const filter = input.value.toUpperCase();
+  const table = document.getElementById(tableId);
+  const tr = table.getElementsByTagName('tr');
+  for (let i = 1; i < tr.length; i++) {
+    const td = tr[i].getElementsByTagName('td')[1];
+    if (td) {
+      const txtValue = td.textContent || td.innerText;
+      tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? '' : 'none';
+    }
+  }
+}
+
+// Initialize
+renderBatters();
+renderBowlers();
+renderRRSquad();
+</script>
+</body>
+</html>
